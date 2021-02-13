@@ -2,6 +2,8 @@
 __pycache__/
 *.py[cod]
 *$py.class
+hello-pyqt.py
+*.pyproject*
 
 # C extensions
 *.so
