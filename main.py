@@ -20,6 +20,8 @@ class Main(QWidget):
         self.WINDOW_WIDTH = 768
         self.BORDER_COLOR = 'gray'
         self.PLAYER_POS = self.BORDER_THICKNESS
+        self.BALL_POSX = int(self.WINDOW_WIDTH / 2)
+        self.BALL_POSY = int(self.WINDOW_HEIGHT / 2)
         self.initUI()
 
     def initUI(self):
@@ -28,6 +30,7 @@ class Main(QWidget):
         self.setWindowTitle("Drawing example")
         # self.initGameField()
         self.initPlayer()
+        self.initBall()
         self.show()
 
     def initPlayer(self):
@@ -36,7 +39,15 @@ class Main(QWidget):
         self.player.resize(self.PLAYER_WIDTH, self.PLAYER_HEIGHT)
         self.player.move(self.BORDER_THICKNESS, int(self.WINDOW_HEIGHT/2))
         self.PLAYER_POS = self.player.y() / self.height()
+        
 
+    def initBall(self):
+        self.ball = QWidget(self)
+        self.ball.setStyleSheet('background-color: lightblue;')
+        self.ball.resize(self.PLAYER_WIDTH, self.PLAYER_WIDTH)
+        self.ball.move(int(self.WINDOW_WIDTH / 2 - self.BORDER_THICKNESS / 2), int(self.WINDOW_HEIGHT / 2))
+        self.BALL_POSX = self.ball.x() / self.WINDOW_WIDTH
+        self.BALL_POSY = self.ball.y() / self.WINDOW_HEIGHT
 
     def drawField(self, qp):
         qp.setPen(QPen(QColor(self.BORDER_COLOR), self.WINDOW_WIDTH/100, Qt.DashLine))
@@ -54,6 +65,8 @@ class Main(QWidget):
         self.PLAYER_HEIGHT = int(self.height() / 8)
         self.player.resize(self.PLAYER_WIDTH, self.PLAYER_HEIGHT)
         self.player.move(self.BORDER_THICKNESS, int(self.WINDOW_HEIGHT * self.PLAYER_POS))
+        self.ball.resize(self.PLAYER_WIDTH, self.PLAYER_WIDTH)
+        self.ball.move(self.BALL_POSX * self.WINDOW_WIDTH, self.BALL_POSY*self.WINDOW_HEIGHT)
 
     def resizeEvent(self, event):
         print("Window was resized.")
@@ -64,7 +77,6 @@ class Main(QWidget):
         qp = QPainter(self)
         self.drawField(qp)
         
-
     def drawPoints(self, qp):
         qp.setPen(QColor(255, 0, 0))
         size = self.size()
