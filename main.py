@@ -24,7 +24,7 @@ class Main(QWidget):
         self.WINDOW_HEIGHT = 1024
         self.WINDOW_WIDTH = 768
         self.TICK_SPEED = 10
-        self.BALL_SPEED = 5
+        self.BALL_SPEED = 10
         self.BORDER_COLOR = 'gray'
         self.initUI()
 
@@ -52,7 +52,13 @@ class Main(QWidget):
         new_posy = int(self.BALL_POSY * self.WINDOW_HEIGHT- self.BALL_SPEEDY)
         self.BALL_POSX = self.ball.x() / self.WINDOW_WIDTH
         self.BALL_POSY = self.ball.y() / self.WINDOW_HEIGHT
-        if new_posy < self.BORDER_THICKNESS or new_posy + self.PLAYER_WIDTH >= self.WINDOW_HEIGHT - self.BORDER_THICKNESS:
+        if new_posx <= 0:
+            print('goal to player1')
+            self.respawn_ball()
+        elif new_posx >= self.WINDOW_WIDTH:
+            print('goal to player2')
+            self.respawn_ball()
+        elif new_posy < self.BORDER_THICKNESS or new_posy + self.PLAYER_WIDTH >= self.WINDOW_HEIGHT - self.BORDER_THICKNESS:
             print('border hit')
             self.BALL_SPEEDY = -self.BALL_SPEEDY
         elif self.player1.y() <= new_posy <=self.player1.y() + self.PLAYER_HEIGHT and new_posx <= self.BORDER_THICKNESS + self.PLAYER_WIDTH:
@@ -80,10 +86,8 @@ class Main(QWidget):
         self.BALL_POSX = self.ball.x() / self.WINDOW_WIDTH
         self.BALL_POSY = self.ball.y() / self.WINDOW_HEIGHT
         phi = rand_angle(60)
-        print('old speed:', self.BALL_SPEEDX)
         self.BALL_SPEEDX = int((self.BALL_SPEED-1) * math.cos(phi)) + 1
         self.BALL_SPEEDY = int((self.BALL_SPEED-1) * math.sin(phi)) + 1
-        print('new speed:', self.BALL_SPEEDX)
 
     def player_move_up(self, player):
         if (player.y() >= self.BORDER_THICKNESS+self.STEP_SIZE):
@@ -119,8 +123,8 @@ class Main(QWidget):
         self.PLAYER_WIDTH = int( self.WINDOW_WIDTH / 80)
         self.PLAYER_HEIGHT = int(self.WINDOW_HEIGHT / 8)
         phi = rand_angle(60)
-        # self.BALL_SPEEDX = int(self.BALL_SPEEDX * self.SCALEX)
-        # self.BALL_SPEEDY = int(self.BALL_SPEEDY * self.SCALEY)
+        self.BALL_SPEEDX = int(self.BALL_SPEEDX * self.SCALEX)
+        self.BALL_SPEEDY = int(self.BALL_SPEEDY * self.SCALEY)
         self.player1.resize(self.PLAYER_WIDTH, self.PLAYER_HEIGHT)
         self.player1.move(self.BORDER_THICKNESS, int(self.WINDOW_HEIGHT * self.PLAYER_POS))
         self.ball.resize(self.PLAYER_WIDTH, self.PLAYER_WIDTH)
