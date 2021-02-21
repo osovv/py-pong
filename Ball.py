@@ -8,18 +8,22 @@ from random import randint
 from Player import Player
 import math
 import time
-from main import rand_angle
+
+def rand_angle(angle):
+    rad = int((angle * math.pi / 180) * 1000)
+    return randint(-rad, rad) / 1000
 
 
 class Ball(QWidget):
     def __init__(self,color, size, speed, field, angle):
+        QWidget.__init__(self)
         self.speed = speed
         self.set_size(size)
         self.set_color(color)
         self.set_speedxy(angle)
-        self.move(int(field.width / 2 - field.bthickness / 2), int (field.height / 2 ))
+        self.move(int(field.width / 2 - field.border_thickness / 2), int (field.height / 2 ))
         self.pos_x = self.x() / field.width
-        self.pos_y = self.y() / field.height()
+        self.pos_y = self.y() / field.height
         
     def set_speedxy(self, angle):
         self.speed_x = int((self.speed - 1)* math.cos(angle)) + 1
