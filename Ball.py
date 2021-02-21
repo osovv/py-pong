@@ -12,14 +12,21 @@ from main import rand_angle
 
 
 class Ball(QWidget):
-    def __init__(self):
-        self.speed = 10
-        self.pos_x = 0
-        self.pos_y = 0
-        self.speed_x = 10
-        self.speed_y = 10
-        self.size = 5
-        self.setStyleSheet('background-color: lightblue;')
+    def __init__(self,color, size, speed, field, angle):
+        self.speed = speed
+        self.set_size(size)
+        self.set_color(color)
+        self.set_speedxy(angle)
+        self.move(int(field.width / 2 - field.bthickness / 2), int (field.height / 2 ))
+        self.pos_x = self.x() / field.width
+        self.pos_y = self.y() / field.height()
+        
+    def set_speedxy(self, angle):
+        self.speed_x = int((self.speed - 1)* math.cos(angle)) + 1
+        self.speed_y = int((self.speed - 1) * math.sin(angle)) + 1
+
+    def set_speed(self, speed):
+        self.speed = speed
 
     def set_color(self, color):
         self.setStyleSheet('background-color: ' + color + ';')
