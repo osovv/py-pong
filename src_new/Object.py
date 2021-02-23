@@ -10,6 +10,8 @@ class Object(QWidget):
 		self.width = width
 		self.pos_x = pos_x
 		self.pos_y = pos_y
+		self.resize(width, height)
+		self.move(pos_x, pos_y)
 
 	@property
 	def color(self):
