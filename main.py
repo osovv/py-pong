@@ -28,8 +28,10 @@ class Main(QMainWindow):
         self.WINDOW_WIDTH = 768
         self.TICK_SPEED = 10
         self.BALL_SPEED = 10
+        self.BACKGROUND_COLOR = 'black'
         self.BORDER_COLOR = 'gray'
         self.SLEEP_TIME = 1
+        self.setStyleSheet('color: black;')
         self.initUI()
 
     def initUI(self):
@@ -110,8 +112,8 @@ class Main(QMainWindow):
     #         player.move(player.x(), self.height()-self.BORDER_THICKNESS-self.PLAYER_HEIGHT)
     #         self.PLAYER_POS = player.y() / self.WINDOW_HEIGHT
 
-    def draw_field(self, qp):
-        self.field.draw_field(qp, self.BORDER_COLOR)
+    # def draw_field(self, qp):
+    #     self.field.draw_field(qp, self.BORDER_COLOR)
         # qp.setPen(QPen(QColor(self.BORDER_COLOR), self.WINDOW_WIDTH/100, Qt.DashLine))
         # qp.drawLine(int(self.WINDOW_WIDTH/2), 0, int(self.WINDOW_WIDTH/2), self.WINDOW_HEIGHT)
         # qp.setPen(QPen(QColor(self.BORDER_COLOR), self.WINDOW_WIDTH/100, Qt.SolidLine))
@@ -146,7 +148,7 @@ class Main(QMainWindow):
 
     def paintEvent(self, event):
         qp = QPainter(self)
-        self.field.draw_field(qp, 'black')
+        self.field.draw_field(qp, self.BACKGROUND_COLOR, self.BORDER_COLOR)
 
     def keyPressEvent(self, e):
         if e.key() == Qt.Key_Q:

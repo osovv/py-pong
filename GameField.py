@@ -23,12 +23,13 @@ class GameField(QWidget):
 	def set_color(self, color):
 		self.setStyleSheet('background-color: ' + color + ';')
 	
-	def draw_field(self, qp, color):
-		qp.setPen(QPen(QColor(color), self.width/100, Qt.DashLine))
+	def draw_field(self, qp, color, bcolor):
+		qp.fillRect(0, 0, self.width, self.height, QColor(color))
+		qp.setPen(QPen(QColor(bcolor), self.width/100, Qt.DashLine))
 		qp.drawLine(int(self.width/2), 0, int(self.width/2), self.height)
-		qp.setPen(QPen(QColor(color), self.width/100, Qt.SolidLine))
-		qp.fillRect(0, 0, self.width, self.border_thickness, QColor(color))
-		qp.fillRect(0, self.height-self.border_thickness, self.width, self.border_thickness, QColor(color))
+		qp.setPen(QPen(QColor(bcolor), self.width/100, Qt.SolidLine))
+		qp.fillRect(0, 0, self.width, self.border_thickness, QColor(bcolor))
+		qp.fillRect(0, self.height-self.border_thickness, self.width, self.border_thickness, QColor(bcolor))
 
 
 	@property
