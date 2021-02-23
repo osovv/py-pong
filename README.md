@@ -1,5 +1,8 @@
 # py-pong
 Basic Pong game written on PyQT5.
+## Dependencies
+```python-pyqt5```
+To install run ```pip install PyQt5```
 ## How to run
 To run the game execute:
 ```python main.py```
