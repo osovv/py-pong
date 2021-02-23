@@ -15,8 +15,8 @@ def rand_angle(angle):
 
 
 class Ball(QWidget):
-    def __init__(self,color, size, speed, field, angle):
-        QWidget.__init__(self)
+    def __init__(self, parent, color, size, speed, field, angle):
+        super(Ball, self).__init__(parent)
         self.speed = speed
         self.set_size(size)
         self.set_color(color)

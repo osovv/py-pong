@@ -5,8 +5,8 @@ from PyQt5.QtCore import Qt, QTimer
 
 
 class GameField(QWidget):
-	def __init__(self, color, width, height, thickness):
-		QWidget.__init__(self)
+	def __init__(self, parent, color, width, height, thickness):
+		super(GameField, self).__init__(parent)
 		self.set_color(color)
 		self.set_geometry(width, height)
 		self.border_thickness = thickness

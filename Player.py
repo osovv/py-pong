@@ -4,8 +4,8 @@ from PyQt5.QtWidgets import QWidget
 
 
 class Player(QWidget):
-    def __init__(self, color, step_size, width, height, pos_x, pos_y, field):
-        QWidget.__init__(self)
+    def __init__(self, parent, color, step_size, width, height, pos_x, pos_y, field):
+        super(Player, self).__init__(parent)
         self.step_size = step_size
         self.set_size(width, height)
         self.set_color(color)
