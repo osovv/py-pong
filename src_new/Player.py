@@ -13,6 +13,10 @@ class Player(Object):
 	def resizeEvent(self, e):
 		if self.flag:
 			super(Player, self).resizeEvent(e)
+		self.new_step_size *= self.scale_y
+		if abs(self.new_step_size - self.step_size) >=1:
+			self.step_size = self.new_step_size
+		
 
 	def move_up(self, field):
 		if self.y() >= field.bthick + self.step_size:
@@ -42,3 +46,4 @@ class Player(Object):
 	@step_size.setter
 	def step_size(self, step_size):
 		self._step_size = step_size
+		self.new_step_size = step_size
