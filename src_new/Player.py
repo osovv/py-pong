@@ -15,7 +15,7 @@ class Player(Object):
 			super(Player, self).resizeEvent(e)
 		self.new_step_size *= self.scale_y
 		if abs(self.new_step_size - self.step_size) >=1:
-			self.step_size = self.new_step_size
+			self.step_size = self.new_step_sizeы
 		
 
 	def move_up(self, field):
