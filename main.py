@@ -72,17 +72,6 @@ class Main(QMainWindow):
     def init_players(self):
         self.player1 = Player(self, "red", self.STEP_SIZE, self.PLAYER_WIDTH, self.PLAYER_HEIGHT, self.field.border_thickness, int(self.field.height / 2), self.field)
         self.player2 = Player(self, "blue", self.STEP_SIZE, self.PLAYER_WIDTH, self.PLAYER_HEIGHT, self.field.width - self.field.border_thickness - self.PLAYER_WIDTH, int(self.field.height / 2), self.field)
-        self.player1.show()
-        self.player2.show()
-        # self.player1 = QWidget(self)
-        # self.player1.setStyleSheet('background-color: red;')
-        # self.player1.resize(self.PLAYER_WIDTH, self.PLAYER_HEIGHT)
-        # self.player1.move(self.BORDER_THICKNESS, int(self.WINDOW_HEIGHT/2))
-        # self.player2 = QWidget(self)
-        # self.player2.setStyleSheet('background-color: blue;')
-        # self.player2.resize(self.PLAYER_WIDTH, self.PLAYER_HEIGHT)
-        # self.player2.move(self.WINDOW_WIDTH - self.BORDER_THICKNESS - self.PLAYER_WIDTH, int(self.WINDOW_HEIGHT/2))
-        # self.PLAYER_POS = self.player1.y() / self.height()
         
     def move_ball(self):
         status = 0
@@ -107,55 +96,12 @@ class Main(QMainWindow):
             self.win_text.setStyleSheet('color: blue; font-size: 25pt;')
             self.win_text.setText('Player 2 \nWon')
             self.win_text.show()
-        # status = self.ball.move_ball(self.WINDOW_WIDTH, self.WINDOW_HEIGHT, self.)
 
     def init_ball(self):
-        self.ball = Ball(self, "lightblue", self.PLAYER_WIDTH, self.BALL_SPEED, self.field, rand_angle(60))
-        self.ball.show()    
-        # self.ball = QWidget(self)
-        # self.ball.setStyleSheet('background-color: lightblue;')
-        # self.ball.resize(self.PLAYER_WIDTH, self.PLAYER_WIDTH)
-        # self.ball.move(int(self.WINDOW_WIDTH / 2 - self.BORDER_THICKNESS / 2), int(self.WINDOW_HEIGHT / 2))
-        # self.BALL_POSX = self.ball.x() / self.WINDOW_WIDTH
-        # self.BALL_POSY = self.ball.y() / self.WINDOW_HEIGHT
-        # phi = rand_angle(60)
-        # self.BALL_SPEEDX = int((self.BALL_SPEED-1) * math.cos(phi)) + 1
-        # self.BALL_SPEEDY = int((self.BALL_SPEED-1) * math.sin(phi)) + 1
+        self.ball = Ball(self, "lightblue", self.PLAYER_WIDTH, self.BALL_SPEED, self.field, rand_angle(60))   
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.move_ball)
         self.timer.start(self.TICK_SPEED)
-
-    # def respawn_ball(self):
-    #     self.ball.move(int(self.WINDOW_WIDTH / 2 - self.BORDER_THICKNESS / 2), int(self.WINDOW_HEIGHT / 2))
-    #     self.BALL_POSX = self.ball.x() / self.WINDOW_WIDTH
-    #     self.BALL_POSY = self.ball.y() / self.WINDOW_HEIGHT
-    #     phi = rand_angle(60)
-    #     self.BALL_SPEEDX = int((self.BALL_SPEED-1) * math.cos(phi)) + 1
-    #     self.BALL_SPEEDY = int((self.BALL_SPEED-1) * math.sin(phi)) + 1
-
-    # def player_move_up(self, player):
-    #     if (player.y() >= self.BORDER_THICKNESS+self.STEP_SIZE):
-    #             player.move(player.x(), player.y()-self.STEP_SIZE)
-    #             self.PLAYER_POS = player.y() / self.WINDOW_HEIGHT
-    #     else:
-    #             player.move(player.x(), self.BORDER_THICKNESS)
-    #             self.PLAYER_POS =player.y() / self.WINDOW_HEIGHT
-
-    # def player_move_down(self, player):
-    #     if (player.y()+self.PLAYER_HEIGHT+self.STEP_SIZE <= self.height()-self.BORDER_THICKNESS):
-    #             player.move(player.x(), player.y()+self.STEP_SIZE)
-    #             self.PLAYER_POS = player.y() / self.WINDOW_HEIGHT
-    #     else:
-    #         player.move(player.x(), self.height()-self.BORDER_THICKNESS-self.PLAYER_HEIGHT)
-    #         self.PLAYER_POS = player.y() / self.WINDOW_HEIGHT
-
-    # def draw_field(self, qp):
-    #     self.field.draw_field(qp, self.BORDER_COLOR)
-        # qp.setPen(QPen(QColor(self.BORDER_COLOR), self.WINDOW_WIDTH/100, Qt.DashLine))
-        # qp.drawLine(int(self.WINDOW_WIDTH/2), 0, int(self.WINDOW_WIDTH/2), self.WINDOW_HEIGHT)
-        # qp.setPen(QPen(QColor(self.BORDER_COLOR), self.WINDOW_WIDTH/100, Qt.SolidLine))
-        # qp.fillRect(0, 0, self.WINDOW_WIDTH, self.BORDER_THICKNESS, QColor(self.BORDER_COLOR))
-        # qp.fillRect(0, self.WINDOW_HEIGHT-self.BORDER_THICKNESS, self.WINDOW_WIDTH, self.BORDER_THICKNESS, QColor(self.BORDER_COLOR))
 
     def redraw(self):
         self.SCALEX = self.field.width / self.width()
