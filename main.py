@@ -31,7 +31,7 @@ class Main(QMainWindow):
         self.BACKGROUND_COLOR = 'black'
         self.BORDER_COLOR = 'gray'
         self.SLEEP_TIME = 1
-        # self.setStyleSheet('color: black;')
+        self.isPlayable = True
         self.initUI()
 
     def initUI(self):
@@ -44,13 +44,26 @@ class Main(QMainWindow):
     def init_scores(self):
         self.score1 = QLabel(self)
         self.score2 = QLabel(self)
-        self.score1.setStyleSheet('color: gray;')
-        self.score2.setStyleSheet('color: gray;')
+        self.win_text = QLabel(self)
+        self.score1.setStyleSheet('color: red; font-size: 18pt;')
+        self.score2.setStyleSheet('color: blue; font-size: 18pt;')
+        self.score1.setText("11")
+        self.score2.setText("0")
+        self.score1.resize(self.field.border_thickness * 3, self.field.border_thickness * 3)
+        self.score2.resize(self.field.border_thickness * 3, self.field.border_thickness * 3)
+        self.win_text.resize(self.field.border_thickness * 8, self.field.border_thickness * 6)
+        self.score1.move(int(self.field.border_thickness * 2), int(self.field.border_thickness * 2))
+        self.score2.move(int(self.field.width - self.field.border_thickness * 3), int(self.field.border_thickness * 2))
+        self.win_text.move(int(self.field.width / 2 - self.field.border_thickness * 3), int(self.field.height / 2 - self.field.border_thickness * 2))
+
+    def reset_scores(self):
+        self.timer.stop()
+        self.win_text.hide()
+        self.ball.spawn(self.field)
         self.score1.setText("0")
         self.score2.setText("0")
-        self.score1.resize(100, 100)
-        self.score1.move(50,50)
-        self.score1.textFormat()
+        self.isPlayable = True
+        self.timer.start(self.TICK_SPEED)
 
     def init_field(self):
         self.field = GameField(self, 'black', self.WINDOW_WIDTH, self.WINDOW_HEIGHT, self.BORDER_THICKNESS)
@@ -72,7 +85,28 @@ class Main(QMainWindow):
         # self.PLAYER_POS = self.player1.y() / self.height()
         
     def move_ball(self):
-        self.ball.move_ball(self.field, self.player1, self.player2)
+        status = 0
+        status = self.ball.move_ball(self.field, self.player1, self.player2, self.score1, self.score2)
+        if status == 1:
+            self.score2.setText(str(int(self.score2.text()) + 1))
+            time.sleep(self.SLEEP_TIME)
+            self.ball.spawn(self.field)
+        if status == 2:
+            self.score1.setText(str(int(self.score1.text()) + 1))
+            time.sleep(self.SLEEP_TIME)
+            self.ball.spawn(self.field)
+        if int(self.score1.text()) == 11:
+            self.timer.stop()
+            self.isPlayable = False
+            self.win_text.setStyleSheet('color: red; font-size: 25pt;')
+            self.win_text.setText('Player 1 \nWon')
+            self.win_text.show()
+        if int(self.score2.text()) == 11:
+            self.timer.stop()
+            self.isPlayable = False
+            self.win_text.setStyleSheet('color: blue; font-size: 25pt;')
+            self.win_text.setText('Player 2 \nWon')
+            self.win_text.show()
         # status = self.ball.move_ball(self.WINDOW_WIDTH, self.WINDOW_HEIGHT, self.)
 
     def init_ball(self):
@@ -87,9 +121,9 @@ class Main(QMainWindow):
         # phi = rand_angle(60)
         # self.BALL_SPEEDX = int((self.BALL_SPEED-1) * math.cos(phi)) + 1
         # self.BALL_SPEEDY = int((self.BALL_SPEED-1) * math.sin(phi)) + 1
-        timer = QTimer(self)
-        timer.timeout.connect(self.move_ball)
-        timer.start(self.TICK_SPEED)
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.move_ball)
+        self.timer.start(self.TICK_SPEED)
 
     # def respawn_ball(self):
     #     self.ball.move(int(self.WINDOW_WIDTH / 2 - self.BORDER_THICKNESS / 2), int(self.WINDOW_HEIGHT / 2))
@@ -126,6 +160,7 @@ class Main(QMainWindow):
     def redraw(self):
         self.SCALEX = self.field.width / self.width()
         self.SCALEY = self.field.height / self.height()
+        self.ball.speed = int(self.ball.speed * (self.SCALEX + self.SCALEY) / 2)
         self.field.width = self.width()
         self.field.height = self.height()
         self.field.border_thickness = int(self.field.height / 40)
@@ -140,7 +175,7 @@ class Main(QMainWindow):
 
         self.ball.speed_x = int(self.ball.speed_x * self.SCALEX)
         self.ball.speed_y = int(self.ball.speed_y * self.SCALEY)
-
+        
         self.player1.pos_x = self.field.border_thickness
         self.player1.pos_y = int(self.player1.rel_y * self.field.height)
         self.player2.pos_x = int(self.field.width - self.field.border_thickness - self.player2.width)
@@ -155,12 +190,14 @@ class Main(QMainWindow):
         self.ball.pos_x = int(self.ball.rel_x * self.field.width)
         self.ball.pos_y = int(self.ball.rel_y*self.field.height)
 
+        self.score1.move(int(self.field.border_thickness * 2), int(self.field.border_thickness * 2))
+        self.score2.move(int(self.field.width - self.field.border_thickness * 2), int(self.field.border_thickness * 2))
+        self.win_text.move(int(self.field.width / 2 - self.field.border_thickness * 3), int(self.field.height / 2 - self.field.border_thickness * 3))
+   
     def resizeEvent(self, event):
-        print('resize event')
         self.redraw()
 
     def paintEvent(self, event):
-        # print('paint event')
         qp = QPainter(self)
         self.field.draw_field(qp, self.BACKGROUND_COLOR, self.BORDER_COLOR)
         self.player1.draw(qp)
@@ -168,28 +205,23 @@ class Main(QMainWindow):
         self.ball.draw(qp)
 
     def keyPressEvent(self, e):
+        if e.key() == Qt.Key_T:
+                self.reset_scores()
         if e.key() == Qt.Key_Q:
             print('Stop')
             self.close()
+        if not self.isPlayable:
+            return
         elif e.key() == Qt.Key_Up:
             self.player2.move_up(self.field)
-            print("Up pressed")
-            # self.player_move_up(self.player1)
         elif e.key() == Qt.Key_Down:
             self.player2.move_down(self.field)
-            print("Down pressed")
-            # self.player_move_down(self.player1)
         elif e.key() == Qt.Key_W:
             self.player1.move_up(self.field)
-            print("W pressed")
-            # self.player_move_up(self.player2)
         elif e.key() == Qt.Key_S:
             self.player1.move_down(self.field)
-            print("S pressed")
-            # self.player_move_down(self.player2)
         elif e.key() == Qt.Key_R:
-                self.respawn_ball()
-
+                self.ball.spawn(self.field)
         
 
 if __name__ == '__main__':

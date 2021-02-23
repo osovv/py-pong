@@ -19,7 +19,7 @@ class Player(QWidget):
         self.color = color
         self.setStyleSheet('background-color: ' + color + ';')
     
-    def set_size(self, height, width):
+    def set_size(self, width, height):
         self.height = height
         self.thickness = width
         self.width = width
@@ -49,17 +49,23 @@ class Player(QWidget):
             self.rel_y = self.y() / field.height
 
     @property
+    def height(self):
+        return self._height
+    @height.setter
+    def height(self, height):
+        self._height = height
+    @property
+    def width(self):
+        return self._width
+    @width.setter
+    def width(self, width):
+        self._width = width
+    @property
     def step_size(self):
         return self._step_size
     @step_size.setter
     def step_size(self, step_size):
         self._step_size = step_size
-    @property
-    def thickness(self):
-        return self._thickness
-    @thickness.setter
-    def thickness(self, thickness):
-        self._thickness = thickness
     @property
     def rel_y(self):
          return self._rel_y
