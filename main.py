@@ -17,9 +17,9 @@ def rand_angle(angle):
     return randint(-rad, rad) / 1000
 
 
-class Main(QWidget):
-    def __init__(self):
-        QWidget.__init__(self)
+class Main(QMainWindow):
+    def __init__(self, *args, **kwargs):
+        super(Main, self).__init__(*args, **kwargs)
         self.STEP_SIZE = 5
         self.PLAYER_WIDTH = 10
         self.PLAYER_HEIGHT = 60
@@ -111,7 +111,7 @@ class Main(QWidget):
     #         self.PLAYER_POS = player.y() / self.WINDOW_HEIGHT
 
     def draw_field(self, qp):
-        field.draw_field(qp, self.BORDER_COLOR)
+        self.field.draw_field(qp, self.BORDER_COLOR)
         # qp.setPen(QPen(QColor(self.BORDER_COLOR), self.WINDOW_WIDTH/100, Qt.DashLine))
         # qp.drawLine(int(self.WINDOW_WIDTH/2), 0, int(self.WINDOW_WIDTH/2), self.WINDOW_HEIGHT)
         # qp.setPen(QPen(QColor(self.BORDER_COLOR), self.WINDOW_WIDTH/100, Qt.SolidLine))
@@ -119,26 +119,30 @@ class Main(QWidget):
         # qp.fillRect(0, self.WINDOW_HEIGHT-self.BORDER_THICKNESS, self.WINDOW_WIDTH, self.BORDER_THICKNESS, QColor(self.BORDER_COLOR))
 
     def redraw(self):
-        self.SCALEX = self.WINDOW_WIDTH / self.width()
-        self.SCALEY = self.WINDOW_HEIGHT / self.height()
-        self.WINDOW_WIDTH = self.width()
-        self.WINDOW_HEIGHT = self.height()
-        self.BORDER_THICKNESS = int(self.WINDOW_HEIGHT / 40)
-        self.STEP_SIZE = int(self.height() / 40)
-        self.BALL_SPEED = int(self. BALL_SPEED * (self.SCALEX + self.SCALEY) / 2)
-        self.PLAYER_WIDTH = int( self.WINDOW_WIDTH / 80)
-        self.PLAYER_HEIGHT = int(self.WINDOW_HEIGHT / 8)
+        self.SCALEX = self.field.width / self.width()
+        self.SCALEY = self.field.height / self.height()
+        self.field.width = self.width()
+        self.field.height = self.height()
+        self.field.border_thickness = int(self.field.height / 40)
+        self.player1.step_size = int(self.height() / 40)
+        self.player2.step_size = int(self.height() / 40)
+        self.ball.speed = int(self.ball.speed * (self.SCALEX + self.SCALEY) / 2)
+        self.player1.width = int( self.field.width / 80)
+        self.player1.height = int(self.field.height / 8)
+        self.player2.width = int( self.field.width / 80)
+        self.player2.height = int(self.field.height / 8)
         phi = rand_angle(60)
-        self.BALL_SPEEDX = int(self.BALL_SPEEDX * self.SCALEX)
-        self.BALL_SPEEDY = int(self.BALL_SPEEDY * self.SCALEY)
-        self.player1.resize(self.PLAYER_WIDTH, self.PLAYER_HEIGHT)
-        self.player1.move(self.BORDER_THICKNESS, int(self.WINDOW_HEIGHT * self.PLAYER_POS))
-        self.ball.resize(self.PLAYER_WIDTH, self.PLAYER_WIDTH)
-        self.ball.move(int(self.BALL_POSX * self.WINDOW_WIDTH), int(self.BALL_POSY*self.WINDOW_HEIGHT))
+        self.ball.speed_x = int(self.ball.speed_x * self.SCALEX)
+        self.ball.speed_y = int(self.ball.speed_y * self.SCALEY)
+        self.player1.resize(self.player1.width, self.player1.height)
+        self.player1.move(self.field.border_thickness, int(self.field.height * self.player1.pos_y))
+        self.player2.resize(self.player2.width, self.player2.height)
+        self.player2.move(self.field.width - self.field.border_thickness - self.player2.width, int(self.field.height * self.player2.pos_y))
+        self.ball.set_size(int((self.player1.width + self.player2.width) / 2))
+        self.ball.move(int(self.ball.pos_x * self.field.width), int(self.ball.pos_y*self.field.height))
 
     def resizeEvent(self, event):
-        pass
-        # self.redraw()
+        self.redraw()
 
     def paintEvent(self, event):
         qp = QPainter(self)
