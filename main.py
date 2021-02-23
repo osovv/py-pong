@@ -191,7 +191,7 @@ class Main(QMainWindow):
         self.ball.pos_y = int(self.ball.rel_y*self.field.height)
 
         self.score1.move(int(self.field.border_thickness * 2), int(self.field.border_thickness * 2))
-        self.score2.move(int(self.field.width - self.field.border_thickness * 2), int(self.field.border_thickness * 2))
+        self.score2.move(int(self.field.width - self.field.border_thickness * 3), int(self.field.border_thickness * 2))
         self.win_text.move(int(self.field.width / 2 - self.field.border_thickness * 3), int(self.field.height / 2 - self.field.border_thickness * 3))
    
     def resizeEvent(self, event):
