@@ -26,7 +26,7 @@ class Ball(QWidget):
         self.pos_y = int (field.height / 2 )
         self.rel_x = self.x() / field.width
         self.rel_y = self.y() / field.height
-        self.setGeometry(0,0,100,100)
+        self.direction = False
         self.show()
     
     def draw(self, qp):
@@ -51,7 +51,10 @@ class Ball(QWidget):
         self.speed_x = int((self.speed - 1) * math.cos(angle)) + 1
         self.speed_y = int((self.speed - 1) * math.sin(angle)) + 1
 
-    def spawn(self, wwidth, wheight, bthickness):
+    def spawn(self, field):
+        wwidth = field.width
+        wheight = field.height
+        bthickness = field.border_thickness
         self.move(int(wwidth / 2 - bthickness / 2), int(wheight / 2))
         self.pos_x = int(wwidth / 2 - bthickness / 2)
         self.pos_y = int(wheight / 2)
@@ -59,8 +62,11 @@ class Ball(QWidget):
         self.rel_y = self.y() / wheight
         phi = rand_angle(60)
         self.change_angle(phi)
+        if self.direction:
+            self.speed_x = -self.speed_x
+        self.direction = not self.direction
     
-    def move_ball(self, field, p1, p2):
+    def move_ball(self, field, p1, p2, s1, s2):
         wwidth = field.width
         wheight = field.height
         bthickness = field.border_thickness
@@ -69,19 +75,23 @@ class Ball(QWidget):
         self.rel_x = self.x() / wwidth
         self.rel_y = self.y() / wheight
         if new_posx <= 0:
-            print('goal to player1')
+            return 1
         elif new_posx >= wwidth:
-            print('goal to player2')
+            return 2
         elif new_posy < bthickness or new_posy + self.size >= wheight - bthickness:
-            print('border hit')
             self.speed_y = -self.speed_y
-        elif p1.y() <= new_posy <= p1.y() + p1.thickness and new_posx <= p1.x() + p1.thickness:
-            print('player1 hit')
-            self.speed_x = -self.speed_x * 1.5
-        elif p2.y() <= new_posy <= p2.y() + p2.thickness and new_posx >= p2.x():
-            print('player2 hit')
-            self.speed_x = -self.speed_x * 1.5
+        elif p1.y() <= new_posy <= p1.y() + p1.height and new_posx <= p1.x() + p1.width:
+            self.speed_x = -self.speed_x * 1.15
+        elif p2.y() <= new_posy <= p2.y() + p2.height and new_posx >= p2.x():
+            self.speed_x = -self.speed_x * 1.15
         else:
             self.move(new_posx, new_posy)
             self.pos_x = new_posx
             self.pos_y = new_posy
+
+    @property
+    def speed(self):
+        return self._speed
+    @speed.setter
+    def speed(self, speed):
+        self._speed = speed
