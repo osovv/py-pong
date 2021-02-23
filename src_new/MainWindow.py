@@ -42,6 +42,17 @@ class MainWindow(QMainWindow):
 	def keyPressEvent(self, e):
 		if e.key() == Qt.Key_Q:
 			self.close()
+		elif e.key() == Qt.Key_Up:
+			self.p2.move_up(self.field)
+		elif e.key() == Qt.Key_Down:
+			self.p2.move_down(self.field)
+		elif e.key() == Qt.Key_W:
+			self.p1.move_up(self.field)
+		elif e.key() == Qt.Key_S:
+			self.p1.move_down(self.field)
+		elif e.key() == Qt.Key_R:
+			pass
+			# self.ball.spawn(self.field)
 
 	def resizeEvent(self ,e):
 		self.field.scale_x = self.width() / self.field.w 
