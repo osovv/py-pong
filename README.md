@@ -1,5 +1,8 @@
 # py-pong
 Basic Pong game written on PyQT5.
+## How to run
+To run the game execute:
+```python main.py```
 ## Controls
 - ```W/S``` move left(red) player up/down.
 - ```Up/Down``` move right(blue) player up/down.
