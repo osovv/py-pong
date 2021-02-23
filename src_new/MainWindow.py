@@ -23,7 +23,7 @@ class MainWindow(QMainWindow):
 		self.setWindowTitle('PyQT-Pong')
 
 	def init_field(self):
-		self.field = GameField('black', self.width(), self.height(), 0, 0, self)
+		self.field = GameField('black', 1024, 768, 0, 0, self)
 		pass
 
 	def init_players(self):

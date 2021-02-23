@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QWidget
 from PyQt5.QtGui import  QColor, QPalette
 
 class Object(QWidget):
-	def __init__(self, color, height, width, pos_x, pos_y, parent = None):
+	def __init__(self, color, width, height, pos_x, pos_y, parent = None):
 		super(Object, self).__init__(parent)
 		self.setAutoFillBackground(True)
 		self.color = color
