@@ -10,10 +10,10 @@ class GameField(QWidget):
 		self.set_color(color)
 		self.set_geometry(width, height)
 		self.border_thickness = thickness
+		self.show()
 	
 	def set_title(self, title):
 		self.setWindowTitle("Py-Pong")
-
 
 	def set_geometry(self, height, width):
 		self.setGeometry(0, 0, height, width)
@@ -30,7 +30,6 @@ class GameField(QWidget):
 		qp.setPen(QPen(QColor(bcolor), self.width/100, Qt.SolidLine))
 		qp.fillRect(0, 0, self.width, self.border_thickness, QColor(bcolor))
 		qp.fillRect(0, self.height-self.border_thickness, self.width, self.border_thickness, QColor(bcolor))
-
 
 	@property
 	def height(self):

@@ -1,7 +1,7 @@
 # This Python file uses the following encoding: utf-8
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QWidget
-
+from PyQt5.QtGui import QPainter, QColor, QPen
 
 class Player(QWidget):
     def __init__(self, parent, color, step_size, width, height, pos_x, pos_y, field):
@@ -10,31 +10,43 @@ class Player(QWidget):
         self.set_size(width, height)
         self.set_color(color)
         self.move(pos_x, pos_y)
-        self.pos_y = pos_y / field.height
+        self.pos_x = pos_x
+        self.pos_y = pos_y
+        self.rel_y = pos_y / field.height
+        self.show()
         
     def set_color(self, color):
+        self.color = color
         self.setStyleSheet('background-color: ' + color + ';')
     
     def set_size(self, height, width):
         self.height = height
+        self.thickness = width
         self.width = width
         self.resize(height, width)
+    
+    def draw(self, qp):
+        qp.fillRect(self.pos_x, self.pos_y, self.width, self.height, QColor(self.color))
 
     def move_up(self, field):
         if self.y() >= field.border_thickness + self.step_size:
             self.move(self.x(), self.y() - self.step_size)
-            self.pos_y = self.y() / field.height
+            self.pos_y -= self.step_size
+            self.rel_y = self.y() / field.height
         else:
             self.move(self.x(), field.border_thickness)
-            self.pos_y = self.y() / field.height
+            self.pos_y = field.border_thickness
+            self.rel_y = self.y() / field.height
 
     def move_down(self, field):
         if self.y() + self.height + self.step_size <= field.height - field.border_thickness:
             self.move(self.x(), self.y() + self.step_size)
-            self.pos_y = self.y() / field.height
+            self.pos_y += self.step_size
+            self.rel_y = self.y() / field.height
         else:
             self.move(self.x(), field.height - field.border_thickness - self.height)
-            self.pos_y = self.y() / field.height
+            self.pos_y = field.height - field.border_thickness - self.height
+            self.rel_y = self.y() / field.height
 
     @property
     def step_size(self):
@@ -46,11 +58,23 @@ class Player(QWidget):
     def thickness(self):
         return self._thickness
     @thickness.setter
-    def thickness(self, thicnkess):
-        self._thickness = thicnkess
+    def thickness(self, thickness):
+        self._thickness = thickness
     @property
-    def position(self):
-         return self._position
-    @position.setter
-    def position(self, position):
-        self._position = position
+    def rel_y(self):
+         return self._rel_y
+    @rel_y.setter
+    def rel_y(self, rel_y):
+        self._rel_y = rel_y
+    @property
+    def pos_x(self):
+        return self._pos_x
+    @pos_x.setter
+    def pos_x(self, pos_x):
+        self._pos_x = pos_x
+    @property
+    def pos_y(self):
+        return self._pos_y
+    @pos_y.setter
+    def pos_y(self, pos_y):
+        self._pos_y = pos_y

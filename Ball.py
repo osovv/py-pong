@@ -18,12 +18,19 @@ class Ball(QWidget):
     def __init__(self, parent, color, size, speed, field, angle):
         super(Ball, self).__init__(parent)
         self.speed = speed
-        self.set_size(size)
         self.set_color(color)
+        self.set_size(size)
         self.set_speedxy(angle)
         self.move(int(field.width / 2 - field.border_thickness / 2), int (field.height / 2 ))
-        self.pos_x = self.x() / field.width
-        self.pos_y = self.y() / field.height
+        self.pos_x = int(field.width / 2 - field.border_thickness / 2)
+        self.pos_y = int (field.height / 2 )
+        self.rel_x = self.x() / field.width
+        self.rel_y = self.y() / field.height
+        self.setGeometry(0,0,100,100)
+        self.show()
+    
+    def draw(self, qp):
+        qp.fillRect(self.pos_x, self.pos_y, self.size, self.size, QColor(self.color))
         
     def set_speedxy(self, angle):
         self.speed_x = int((self.speed - 1)* math.cos(angle)) + 1
@@ -33,6 +40,7 @@ class Ball(QWidget):
         self.speed = speed
 
     def set_color(self, color):
+        self.color = color
         self.setStyleSheet('background-color: ' + color + ';')
 
     def set_size(self, size):
@@ -45,19 +53,24 @@ class Ball(QWidget):
 
     def spawn(self, wwidth, wheight, bthickness):
         self.move(int(wwidth / 2 - bthickness / 2), int(wheight / 2))
-        self.pos_x = self.x() / wwidth
-        self.pos_y = self.y() / wheight
+        self.pos_x = int(wwidth / 2 - bthickness / 2)
+        self.pos_y = int(wheight / 2)
+        self.rel_x = self.x() / wwidth
+        self.rel_y = self.y() / wheight
         phi = rand_angle(60)
         self.change_angle(phi)
     
-    def move_ball(self, wwidth, wheight, bthickness, p1, p2):
-        new_posx = int(self.pos_x * wwidth - self.speed_x)
-        new_posy = int(self.pos_y * wheight - self.speed_y)
-        self.pos_x = self.ball.x() / wwidth
-        self.pos_y = self.ball.y() / wheight
+    def move_ball(self, field, p1, p2):
+        wwidth = field.width
+        wheight = field.height
+        bthickness = field.border_thickness
+        new_posx = int(self.rel_x * wwidth - self.speed_x)
+        new_posy = int(self.rel_y * wheight - self.speed_y)
+        self.rel_x = self.x() / wwidth
+        self.rel_y = self.y() / wheight
         if new_posx <= 0:
             print('goal to player1')
-        elif new_posx >= self.WINDOW_WIDTH:
+        elif new_posx >= wwidth:
             print('goal to player2')
         elif new_posy < bthickness or new_posy + self.size >= wheight - bthickness:
             print('border hit')
@@ -70,3 +83,5 @@ class Ball(QWidget):
             self.speed_x = -self.speed_x * 1.5
         else:
             self.move(new_posx, new_posy)
+            self.pos_x = new_posx
+            self.pos_y = new_posy

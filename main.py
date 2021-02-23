@@ -31,7 +31,7 @@ class Main(QMainWindow):
         self.BACKGROUND_COLOR = 'black'
         self.BORDER_COLOR = 'gray'
         self.SLEEP_TIME = 1
-        self.setStyleSheet('color: black;')
+        # self.setStyleSheet('color: black;')
         self.initUI()
 
     def initUI(self):
@@ -53,12 +53,14 @@ class Main(QMainWindow):
         self.score1.textFormat()
 
     def init_field(self):
-        self.field = GameField('black',self.WINDOW_WIDTH, self.WINDOW_HEIGHT, self.BORDER_THICKNESS)
+        self.field = GameField(self, 'black', self.WINDOW_WIDTH, self.WINDOW_HEIGHT, self.BORDER_THICKNESS)
+        self.field.show()
 
     def init_players(self):
-        self.player1 = Player("red", self.STEP_SIZE, self.PLAYER_WIDTH, self.PLAYER_HEIGHT, self.field.border_thickness, int(self.field.height / 2), self.field)
-        self.player2 = Player("blue", self.STEP_SIZE, self.PLAYER_WIDTH, self.PLAYER_HEIGHT, self.field.width - self.field.border_thickness - self.PLAYER_WIDTH, int(self.field.height / 2), self.field)
-
+        self.player1 = Player(self, "red", self.STEP_SIZE, self.PLAYER_WIDTH, self.PLAYER_HEIGHT, self.field.border_thickness, int(self.field.height / 2), self.field)
+        self.player2 = Player(self, "blue", self.STEP_SIZE, self.PLAYER_WIDTH, self.PLAYER_HEIGHT, self.field.width - self.field.border_thickness - self.PLAYER_WIDTH, int(self.field.height / 2), self.field)
+        self.player1.show()
+        self.player2.show()
         # self.player1 = QWidget(self)
         # self.player1.setStyleSheet('background-color: red;')
         # self.player1.resize(self.PLAYER_WIDTH, self.PLAYER_HEIGHT)
@@ -70,11 +72,12 @@ class Main(QMainWindow):
         # self.PLAYER_POS = self.player1.y() / self.height()
         
     def move_ball(self):
-        pass
+        self.ball.move_ball(self.field, self.player1, self.player2)
         # status = self.ball.move_ball(self.WINDOW_WIDTH, self.WINDOW_HEIGHT, self.)
 
     def init_ball(self):
-        self.ball = Ball("lightblue", self.PLAYER_WIDTH, self.BALL_SPEED, self.field, rand_angle(60))
+        self.ball = Ball(self, "lightblue", self.PLAYER_WIDTH, self.BALL_SPEED, self.field, rand_angle(60))
+        self.ball.show()    
         # self.ball = QWidget(self)
         # self.ball.setStyleSheet('background-color: lightblue;')
         # self.ball.resize(self.PLAYER_WIDTH, self.PLAYER_WIDTH)
@@ -134,21 +137,35 @@ class Main(QMainWindow):
         self.player2.width = int( self.field.width / 80)
         self.player2.height = int(self.field.height / 8)
         phi = rand_angle(60)
+
         self.ball.speed_x = int(self.ball.speed_x * self.SCALEX)
         self.ball.speed_y = int(self.ball.speed_y * self.SCALEY)
+
+        self.player1.pos_x = self.field.border_thickness
+        self.player1.pos_y = int(self.player1.rel_y * self.field.height)
+        self.player2.pos_x = int(self.field.width - self.field.border_thickness - self.player2.width)
+        self.player2.pos_y = int(self.player2.rel_y * self.field.height)
         self.player1.resize(self.player1.width, self.player1.height)
-        self.player1.move(self.field.border_thickness, int(self.field.height * self.player1.pos_y))
+        self.player1.move(self.field.border_thickness, int(self.field.height * self.player1.rel_y))
         self.player2.resize(self.player2.width, self.player2.height)
-        self.player2.move(self.field.width - self.field.border_thickness - self.player2.width, int(self.field.height * self.player2.pos_y))
+        self.player2.move(self.field.width - self.field.border_thickness - self.player2.width, int(self.field.height * self.player2.rel_y))
+        
         self.ball.set_size(int((self.player1.width + self.player2.width) / 2))
-        self.ball.move(int(self.ball.pos_x * self.field.width), int(self.ball.pos_y*self.field.height))
+        self.ball.move(int(self.ball.rel_x * self.field.width), int(self.ball.rel_y*self.field.height))
+        self.ball.pos_x = int(self.ball.rel_x * self.field.width)
+        self.ball.pos_y = int(self.ball.rel_y*self.field.height)
 
     def resizeEvent(self, event):
+        print('resize event')
         self.redraw()
 
     def paintEvent(self, event):
+        # print('paint event')
         qp = QPainter(self)
         self.field.draw_field(qp, self.BACKGROUND_COLOR, self.BORDER_COLOR)
+        self.player1.draw(qp)
+        self.player2.draw(qp)
+        self.ball.draw(qp)
 
     def keyPressEvent(self, e):
         if e.key() == Qt.Key_Q:
@@ -156,15 +173,19 @@ class Main(QMainWindow):
             self.close()
         elif e.key() == Qt.Key_Up:
             self.player2.move_up(self.field)
+            print("Up pressed")
             # self.player_move_up(self.player1)
         elif e.key() == Qt.Key_Down:
             self.player2.move_down(self.field)
+            print("Down pressed")
             # self.player_move_down(self.player1)
         elif e.key() == Qt.Key_W:
             self.player1.move_up(self.field)
+            print("W pressed")
             # self.player_move_up(self.player2)
         elif e.key() == Qt.Key_S:
             self.player1.move_down(self.field)
+            print("S pressed")
             # self.player_move_down(self.player2)
         elif e.key() == Qt.Key_R:
                 self.respawn_ball()
