@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QDesktopWidget, QLabel
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QTimer
 
 from GameField import GameField
 from Player import Player
@@ -34,6 +34,15 @@ class MainWindow(QMainWindow):
 
 	def init_balls(self):
 		self.b1 = Ball(BALL_COLOR, BALL_WIDTH, BALL_HEIGHT, BALL_POSX, BALL_POSY, self)
+		self.b1.speed = BALL_SPEED
+		self.b1.spawn(self.field)
+		self.timer = QTimer(self)
+		self.timer.timeout.connect(self.move_balls)
+		self.timer.start(TICK_SPEED)
+
+	def move_balls(self):
+		self.b1.move_ball(self.field, self.p1, self.p2)
+
 
 	def init_scores(self):
 		self.s1 = Score(self)
@@ -51,8 +60,7 @@ class MainWindow(QMainWindow):
 		elif e.key() == Qt.Key_S:
 			self.p1.move_down(self.field)
 		elif e.key() == Qt.Key_R:
-			pass
-			# self.ball.spawn(self.field)
+			self.b1.spawn(self.field)
 
 	def resizeEvent(self ,e):
 		self.field.scale_x = self.width() / self.field.w 
