@@ -38,11 +38,11 @@ class Ball(Object):
 			return 2
 		elif new_posy < field.bthick or new_posy + self.h >= field.h - field.bthick:
 			self.speed_y = -self.speed_y
-		elif p1.y()  - self.h < new_posy + self.h < p1.y() + p1.h + self.h and new_posx <= p1.x() + p1.w:
+		elif p1.y()  - self.h < new_posy < p1.y() + p1.h and new_posx <= p1.x() + p1.w:
 			self.speed_x =  -self.speed_x * BALL_ACC
 			if self.speed_x > self.w:
 				self.speed_x = self.speed_x * self.w / abs(self.speed_x)
-		elif p2.y() - self.h < new_posy + self.h < p2.y() + p2.h + self.h and new_posx + self.w >= p2.x():
+		elif p2.y() - self.h < new_posy < p2.y() + p2.h and new_posx + self.w >= p2.x():
 			self.speed_x = -self.speed_x * BALL_ACC
 			if self.speed_x > self.w:
 				self.speed_x = self.speed_x * self.w / abs(self.speed_x)

@@ -59,28 +59,28 @@ class Object(QWidget):
 		return self._h
 	@h.setter
 	def h(self, h):
-		self._h = h
+		self._h = int(h)
 
 	@property
 	def w(self):
 		return self._w
 	@w.setter
 	def w(self, w):
-		self._w = w
+		self._w = int(w)
 
 	@property
 	def pos_x(self):
 		return self._pos_x
 	@pos_x.setter
 	def pos_x(self, pos_x):
-		self._pos_x = pos_x
+		self._pos_x = int(pos_x)
 
 	@property
 	def pos_y(self):
 		return self._pos_y
 	@pos_y.setter
 	def pos_y(self, pos_y):
-		self._pos_y = pos_y
+		self._pos_y = int(pos_y)
 
 	@property
 	def scale_x(self):
