@@ -14,6 +14,6 @@ To run the game execute:\
 - ```Q``` quit.
 ## Task list
 - [x] Get correctly working version.
-- [ ] Add support of parallel input.
+- [x] Add support of parallel input.
 - [ ] Rewrite to get it working with QWidgets.
 
