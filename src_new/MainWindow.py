@@ -20,6 +20,7 @@ class MainWindow(QMainWindow):
 	def init_UI(self):
 		self.setGeometry(0, 0, WIDTH, HEIGHT)
 		self.setWindowTitle('PyQT-Pong')
+		self.keys = dict()
 
 	def init_field(self):
 		self.field = GameField(FIELD_COLOR, self.width(), self.height(), 0, 0, self)
@@ -49,18 +50,28 @@ class MainWindow(QMainWindow):
 		self.s2 = Score(self)
 
 	def keyPressEvent(self, e):
-		if e.key() == Qt.Key_Q:
-			self.close()
-		elif e.key() == Qt.Key_Up:
-			self.p2.move_up(self.field)
-		elif e.key() == Qt.Key_Down:
-			self.p2.move_down(self.field)
-		elif e.key() == Qt.Key_W:
-			self.p1.move_up(self.field)
-		elif e.key() == Qt.Key_S:
-			self.p1.move_down(self.field)
-		elif e.key() == Qt.Key_R:
-			self.b1.spawn(self.field)
+		super(MainWindow, self).keyPressEvent(e)
+		if not self.keys.get(e.key(), False):
+			self.keys[e.key()] = True
+		for key, value in self.keys.items():
+			if value:
+				if key == Qt.Key_Q:
+					self.close()
+				elif key == Qt.Key_Up:
+					self.p2.move_up(self.field)
+				elif key == Qt.Key_Down:
+					self.p2.move_down(self.field)
+				elif key == Qt.Key_W:
+					self.p1.move_up(self.field)
+				elif key == Qt.Key_S:
+					self.p1.move_down(self.field)
+				elif key == Qt.Key_R:
+					self.b1.spawn(self.field)
+
+	def keyReleaseEvent(self, e):
+		super(MainWindow, self).keyPressEvent(e)
+		if self.keys.get(e.key(), True):
+			self.keys[e.key()] = False
 
 	def resizeEvent(self ,e):
 		self.field.scale_x = self.width() / self.field.w 
