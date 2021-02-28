@@ -5,6 +5,7 @@ __pycache__/
 hello-pyqt.py
 *.pyproject*
 
+.idea/*
 # C extensions
 *.so
 
