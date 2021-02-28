@@ -2,7 +2,8 @@
 Basic Pong game written on PyQT5.
 ## Dependencies
 ```python-pyqt5```\
-To install run ```pip install PyQt5```
+To install run \
+```pip install -r requirements.txt```
 ## Versions
 The old version (working on paintEvent) is located in the ```src``` folder.\
 The new version (working on QWidget) is located in the ```src_new``` folder.
