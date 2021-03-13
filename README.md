@@ -21,4 +21,8 @@ To run the game execute:\
 - [x] Get correctly working version.
 - [x] Add support of parallel input.
 - [x] Rewrite to get it working with QWidgets.
+- [ ] Move folders and files to make everything look cleaner.
+- [ ] Add screenshots.
+- [ ] Add GUI to be able to change hotkeys.
+- [ ] Make nicer README.
 
